@@ -56,10 +56,32 @@ void MainWindow::contextMenuEvent(QContextMenuEvent *event){
 
 void MainWindow::newFile(){
     infoLabel->setText(tr("Invoked <b>File|New</b>"));
+
+    QString filename = "d:/buff.txt";
+    QFile file(filename);
+
+    if (file.open(QIODevice::WriteOnly)){
+
+        QTextStream stream(&file);
+        stream << "something";
+
+    }
 }
 
 void MainWindow::open(){
     infoLabel->setText(tr("Invoked <b>File|Open</b>"));
+
+    QString filename = "d:/buff.txt";
+    QFile file(filename);
+
+    if ( file.open(QIODevice::ReadOnly)){
+        QByteArray data = file.readAll();
+        qDebug() << data;
+        infoLabel->setText(tr(data));
+        infoLabel->setWordWrap(true);
+    }
+
+    file.close();
 }
 
 void MainWindow::save(){
