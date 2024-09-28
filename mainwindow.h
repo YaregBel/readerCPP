@@ -3,6 +3,14 @@
 
 #include <QLabel>
 #include <QMainWindow>
+#include <QFontMetrics>
+#include <QTextEdit>
+
+#include <QPushButton>
+#include <QVBoxLayout>
+#include <QStringList>
+
+
 
 QT_BEGIN_NAMESPACE
 class QLabel;
@@ -44,6 +52,12 @@ private slots:
     void about();
     void aboutQt();
 
+    void getTextArea();
+    void showPage(int index);
+
+    void nextPage();
+    void prevPage();
+
 private:
     void createActions();
     void createMenus();
@@ -74,6 +88,17 @@ private:
     QAction *aboutAct;
     QAction *aboutQtAct;
     QLabel *infoLabel;
+
+
+    QLabel *label;
+    QPushButton *nextButton;
+    QPushButton *prevButton;
+    QString text;
+    QStringList pages;
+    int currentPage;
+
+    void paginateText();
+    void updatepPageDisplay();
 
 };
 #endif // MAINWINDOW_H

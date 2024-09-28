@@ -2,8 +2,11 @@
 #include "./ui_mainwindow.h"
 
 #include <QtWidgets>
+#include <QFontMetrics>
+#include <QTextEdit>
 
-MainWindow::MainWindow(QWidget *parent)
+
+MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), currentPage(0)
 {
     QWidget *widget = new QWidget;
     setCentralWidget(widget);
@@ -350,7 +353,68 @@ void MainWindow::createMenus(){
     formatMenu->addAction(setParagraphSpacingAct);
 }
 
+void MainWindow::getTextArea(){
 
+    QLabel *textField = new QLabel();
+    QFontMetrics metrics = textField->fontMetrics();
+
+    QRect availableRect = textField->rect();  // Полная область виджета
+    int availableWidth = availableRect.width();
+    int availableHeight = availableRect.height();
+
+    QString text = "Text ... for ... pagination ...";
+    QStringList lines;
+    int lineHeight = metrics.lineSpacing();
+    int currentHeight = 0;
+
+    for (const QString word : text.split(" ")){
+        QString currentLine;
+        if (metrics.horizontalAdvance(currentLine + word) <= availableWidth){
+            currentLine += word + " ";
+        }
+        else {
+            lines.append(currentLine.trimmed());
+            currentLine = word + " ";
+            currentHeight += lineHeight;
+
+            // Проверка на вместимость по высоте
+            if (currentHeight + lineHeight > availableHeight){
+                break;
+            }
+        }
+    }
+
+    // Зная сколько строк помещается на странице, разбиваем текст
+    QList<QStringList> pages;
+    QStringList currentPage;
+    int pageHeight = 0;
+
+    for (const QString& line : lines){
+        if (pageHeight + lineHeight <= availableHeight){
+            currentPage.append(line);
+            pageHeight += lineHeight;
+        }
+        else{
+            pages.append(currentPage);
+            currentPage.clear();
+            currentPage.append(line);
+            pageHeight += lineHeight;
+
+        }
+    }
+
+    if (!currentPage.isEmpty()){
+        pages.append(currentPage);
+    }
+}
+
+void showPage(int index) {
+    if (index >= 0 && index < pages.size()) {
+        MainWindow::currentPageIndex = index;
+        QString pageText = pages[index].join('\n');
+        widget->setText(pageText);  // Установка текста для отображения
+    }
+}
 
 
 

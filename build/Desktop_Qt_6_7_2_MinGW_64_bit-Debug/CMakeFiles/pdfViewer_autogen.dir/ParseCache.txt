@@ -3,6 +3,7 @@ D:/Projects/pdfViewer/mainwindow.h
  mmc:Q_OBJECT
  mdp:D:/Projects/pdfViewer/build/Desktop_Qt_6_7_2_MinGW_64_bit-Debug/pdfViewer_autogen/moc_predefs.h
  mdp:D:/Projects/pdfViewer/mainwindow.h
+ mdp:D:/progs/QT/6.7.2/mingw_64/include/QtCore/QStringList
  mdp:D:/progs/QT/6.7.2/mingw_64/include/QtCore/q20functional.h
  mdp:D:/progs/QT/6.7.2/mingw_64/include/QtCore/q20memory.h
  mdp:D:/progs/QT/6.7.2/mingw_64/include/QtCore/q20type_traits.h
@@ -122,6 +123,7 @@ D:/Projects/pdfViewer/mainwindow.h
  mdp:D:/progs/QT/6.7.2/mingw_64/include/QtCore/qversiontagging.h
  mdp:D:/progs/QT/6.7.2/mingw_64/include/QtCore/qxptype_traits.h
  mdp:D:/progs/QT/6.7.2/mingw_64/include/QtCore/qyieldcpu.h
+ mdp:D:/progs/QT/6.7.2/mingw_64/include/QtGui/QFontMetrics
  mdp:D:/progs/QT/6.7.2/mingw_64/include/QtGui/qaction.h
  mdp:D:/progs/QT/6.7.2/mingw_64/include/QtGui/qbitmap.h
  mdp:D:/progs/QT/6.7.2/mingw_64/include/QtGui/qbrush.h
@@ -135,6 +137,7 @@ D:/Projects/pdfViewer/mainwindow.h
  mdp:D:/progs/QT/6.7.2/mingw_64/include/QtGui/qkeysequence.h
  mdp:D:/progs/QT/6.7.2/mingw_64/include/QtGui/qpaintdevice.h
  mdp:D:/progs/QT/6.7.2/mingw_64/include/QtGui/qpalette.h
+ mdp:D:/progs/QT/6.7.2/mingw_64/include/QtGui/qpen.h
  mdp:D:/progs/QT/6.7.2/mingw_64/include/QtGui/qpicture.h
  mdp:D:/progs/QT/6.7.2/mingw_64/include/QtGui/qpixelformat.h
  mdp:D:/progs/QT/6.7.2/mingw_64/include/QtGui/qpixmap.h
@@ -142,7 +145,10 @@ D:/Projects/pdfViewer/mainwindow.h
  mdp:D:/progs/QT/6.7.2/mingw_64/include/QtGui/qregion.h
  mdp:D:/progs/QT/6.7.2/mingw_64/include/QtGui/qrgb.h
  mdp:D:/progs/QT/6.7.2/mingw_64/include/QtGui/qrgba64.h
+ mdp:D:/progs/QT/6.7.2/mingw_64/include/QtGui/qtextcursor.h
  mdp:D:/progs/QT/6.7.2/mingw_64/include/QtGui/qtextdocument.h
+ mdp:D:/progs/QT/6.7.2/mingw_64/include/QtGui/qtextformat.h
+ mdp:D:/progs/QT/6.7.2/mingw_64/include/QtGui/qtextoption.h
  mdp:D:/progs/QT/6.7.2/mingw_64/include/QtGui/qtgui-config.h
  mdp:D:/progs/QT/6.7.2/mingw_64/include/QtGui/qtguiexports.h
  mdp:D:/progs/QT/6.7.2/mingw_64/include/QtGui/qtguiglobal.h
@@ -151,11 +157,22 @@ D:/Projects/pdfViewer/mainwindow.h
  mdp:D:/progs/QT/6.7.2/mingw_64/include/QtGui/qwindowdefs_win.h
  mdp:D:/progs/QT/6.7.2/mingw_64/include/QtWidgets/QLabel
  mdp:D:/progs/QT/6.7.2/mingw_64/include/QtWidgets/QMainWindow
+ mdp:D:/progs/QT/6.7.2/mingw_64/include/QtWidgets/QPushButton
+ mdp:D:/progs/QT/6.7.2/mingw_64/include/QtWidgets/QTextEdit
+ mdp:D:/progs/QT/6.7.2/mingw_64/include/QtWidgets/QVBoxLayout
+ mdp:D:/progs/QT/6.7.2/mingw_64/include/QtWidgets/qabstractbutton.h
+ mdp:D:/progs/QT/6.7.2/mingw_64/include/QtWidgets/qabstractscrollarea.h
+ mdp:D:/progs/QT/6.7.2/mingw_64/include/QtWidgets/qboxlayout.h
  mdp:D:/progs/QT/6.7.2/mingw_64/include/QtWidgets/qframe.h
+ mdp:D:/progs/QT/6.7.2/mingw_64/include/QtWidgets/qgridlayout.h
  mdp:D:/progs/QT/6.7.2/mingw_64/include/QtWidgets/qlabel.h
+ mdp:D:/progs/QT/6.7.2/mingw_64/include/QtWidgets/qlayout.h
+ mdp:D:/progs/QT/6.7.2/mingw_64/include/QtWidgets/qlayoutitem.h
  mdp:D:/progs/QT/6.7.2/mingw_64/include/QtWidgets/qmainwindow.h
+ mdp:D:/progs/QT/6.7.2/mingw_64/include/QtWidgets/qpushbutton.h
  mdp:D:/progs/QT/6.7.2/mingw_64/include/QtWidgets/qsizepolicy.h
  mdp:D:/progs/QT/6.7.2/mingw_64/include/QtWidgets/qtabwidget.h
+ mdp:D:/progs/QT/6.7.2/mingw_64/include/QtWidgets/qtextedit.h
  mdp:D:/progs/QT/6.7.2/mingw_64/include/QtWidgets/qtwidgets-config.h
  mdp:D:/progs/QT/6.7.2/mingw_64/include/QtWidgets/qtwidgetsexports.h
  mdp:D:/progs/QT/6.7.2/mingw_64/include/QtWidgets/qtwidgetsglobal.h
@@ -359,6 +376,6 @@ D:/Projects/pdfViewer/mainwindow.h
  mdp:D:/progs/QT/Tools/mingw1120_64/x86_64-w64-mingw32/include/time.h
  mdp:D:/progs/QT/Tools/mingw1120_64/x86_64-w64-mingw32/include/vadefs.h
  mdp:D:/progs/QT/Tools/mingw1120_64/x86_64-w64-mingw32/include/wchar.h
-D:/Projects/pdfViewer/main.cpp
 D:/Projects/pdfViewer/mainwindow.cpp
  uic:./ui_mainwindow.h
+D:/Projects/pdfViewer/main.cpp
