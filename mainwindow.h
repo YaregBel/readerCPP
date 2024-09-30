@@ -29,7 +29,7 @@ public:
 
 #ifndef QT_NO_CONTEXTMENU
     void contextMenuEvent(QContextMenuEvent *event) override;
-#endif // QT_NO_CONTEXTMENU
+#endif  QT_NO_CONTEXTMENU
 
 private slots:
     void newFile();
@@ -52,8 +52,8 @@ private slots:
     void about();
     void aboutQt();
 
-    void getTextArea();
-    void showPage(int index);
+    // void getTextArea();
+    // void showPage(int index);
 
     void nextPage();
     void prevPage();
@@ -97,8 +97,10 @@ private:
     QStringList pages;
     int currentPage;
 
+    // Разбиваем текст на страницы
     void paginateText();
-    void updatepPageDisplay();
+    // Обновляем текст на текущей странице
+    void updatePageDisplay();
 
 };
 #endif // MAINWINDOW_H

@@ -2,8 +2,14 @@
 #include "./ui_mainwindow.h"
 
 #include <QtWidgets>
+#include <QLabel>
+#include <QMainWindow>
 #include <QFontMetrics>
 #include <QTextEdit>
+
+#include <QPushButton>
+#include <QVBoxLayout>
+#include <QStringList>
 
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), currentPage(0)
@@ -12,25 +18,53 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), currentPage(0)
     setCentralWidget(widget);
     QWidget *topFiller = new QWidget;
     topFiller->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    infoLabel = new QLabel(tr("<i>Choose a menu option, or right-click to"
-                              "invoke a context menu</i>"));
+
+    // Создаем label, в котором будет отображаться весь текст на странице
+    // infoLabel = new QLabel(tr("<i>Choose a menu option, or right-click to"
+    //                           "invoke a context menu</i>"));
     // Чтобы функции ниже работали, их нужно определить в этом файле.
-    infoLabel->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
-    infoLabel->setAlignment(Qt::AlignCenter);
+    // infoLabel->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
+    // infoLabel->setAlignment(Qt::AlignCenter);
+
+    label = new QLabel(this);
+    label->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
+    label->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    label->setAlignment(Qt::AlignCenter);
+
+    // Кнопки, для перемещения между страницами
+    nextButton = new QPushButton("Next", this);
+    prevButton = new QPushButton("Previous", this);
+
     QWidget *bottomFiller = new QWidget;
     bottomFiller->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     QVBoxLayout *layout = new QVBoxLayout;
     layout->setContentsMargins(5,5,5,5);
-    layout->addWidget(topFiller);
-    layout->addWidget(infoLabel);
-    layout->addWidget(bottomFiller);
+    //layout->addWidget(topFiller);
+    layout->addWidget(label);
+    layout->addWidget(prevButton);
+    layout->addWidget(nextButton);
+    //layout->addWidget(bottomFiller);
+
     widget->setLayout(layout);
 
+    QString filename = "d:/buff.txt";
+    QFile file(filename);
+    if ( file.open(QIODevice::ReadOnly)){
+        QByteArray data = file.readAll();
+        qDebug() << data;
+        text = tr(data);
+    }
+    file.close();
+
+    paginateText();
+    updatePageDisplay();
+    // Подключаем слоты для кнопок
+    connect(nextButton, &QPushButton::clicked, this, &MainWindow::nextPage);
+    connect(prevButton, &QPushButton::clicked, this, &MainWindow::prevPage);
 
     createActions();
     createMenus();
-
     QString message = tr("A context menu is available by right-clicking");
     statusBar()->showMessage(message);
 
@@ -39,6 +73,67 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), currentPage(0)
     resize(480, 320);
 
 
+
+}
+
+void MainWindow::paginateText() {
+    QFontMetrics metrics(label->font());
+    int labelWidth = label->width();
+    int labelHeight = label->height();
+
+    qDebug() << labelWidth << labelHeight;
+
+    QStringList currentPageLines;
+    QStringList words = text.split(' '); // Разбиваем текст на слова
+    QString currentLine;
+
+    foreach (const QString &word, words) {
+        QString tempLine = currentLine.isEmpty() ? word : currentLine + " " + word;
+        if (metrics.horizontalAdvance(tempLine) <= labelWidth) {
+            currentLine = tempLine;
+        } else {
+            currentPageLines.append(currentLine);
+            currentLine = word;
+        }
+
+        if (metrics.height() * currentPageLines.count() >= labelHeight) {
+            pages.append(currentPageLines.join('\n'));
+            currentPageLines.clear();
+        }
+    }
+
+    if (!currentLine.isEmpty()) {
+        currentPageLines.append(currentLine);
+    }
+
+    if (!currentPageLines.isEmpty()) {
+        pages.append(currentPageLines.join('\n'));
+    }
+}
+
+
+
+void MainWindow::updatePageDisplay() {
+    if (currentPage >= 0 && currentPage < pages.size()) {
+        label->setText(pages[currentPage]);
+    }
+
+    prevButton->setEnabled(currentPage > 0);
+    nextButton->setEnabled(currentPage < pages.size() - 1);
+}
+
+void MainWindow::nextPage() {
+    if (currentPage < pages.size() - 1) {
+        currentPage++;
+        updatePageDisplay();
+    }
+}
+
+void MainWindow::prevPage() {
+    if (currentPage > 0) {
+        currentPage--;
+        updatePageDisplay();
+    }
 }
 
 MainWindow::~MainWindow()
@@ -54,7 +149,7 @@ void MainWindow::contextMenuEvent(QContextMenuEvent *event){
     menu.addAction(pasteAct);
     menu.exec(event->globalPos());
 }
-#endif QT_NO_CONTEXTMENU
+#endif //QT_NO_CONTEXTMENU
 
 
 void MainWindow::newFile(){
@@ -352,78 +447,3 @@ void MainWindow::createMenus(){
     formatMenu->addAction(setLineSpacingAct);
     formatMenu->addAction(setParagraphSpacingAct);
 }
-
-void MainWindow::getTextArea(){
-
-    QLabel *textField = new QLabel();
-    QFontMetrics metrics = textField->fontMetrics();
-
-    QRect availableRect = textField->rect();  // Полная область виджета
-    int availableWidth = availableRect.width();
-    int availableHeight = availableRect.height();
-
-    QString text = "Text ... for ... pagination ...";
-    QStringList lines;
-    int lineHeight = metrics.lineSpacing();
-    int currentHeight = 0;
-
-    for (const QString word : text.split(" ")){
-        QString currentLine;
-        if (metrics.horizontalAdvance(currentLine + word) <= availableWidth){
-            currentLine += word + " ";
-        }
-        else {
-            lines.append(currentLine.trimmed());
-            currentLine = word + " ";
-            currentHeight += lineHeight;
-
-            // Проверка на вместимость по высоте
-            if (currentHeight + lineHeight > availableHeight){
-                break;
-            }
-        }
-    }
-
-    // Зная сколько строк помещается на странице, разбиваем текст
-    QList<QStringList> pages;
-    QStringList currentPage;
-    int pageHeight = 0;
-
-    for (const QString& line : lines){
-        if (pageHeight + lineHeight <= availableHeight){
-            currentPage.append(line);
-            pageHeight += lineHeight;
-        }
-        else{
-            pages.append(currentPage);
-            currentPage.clear();
-            currentPage.append(line);
-            pageHeight += lineHeight;
-
-        }
-    }
-
-    if (!currentPage.isEmpty()){
-        pages.append(currentPage);
-    }
-}
-
-void showPage(int index) {
-    if (index >= 0 && index < pages.size()) {
-        MainWindow::currentPageIndex = index;
-        QString pageText = pages[index].join('\n');
-        widget->setText(pageText);  // Установка текста для отображения
-    }
-}
-
-
-
-
-
-
-
-
-
-
-
-
