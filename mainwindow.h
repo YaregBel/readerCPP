@@ -58,6 +58,10 @@ private slots:
     void nextPage();
     void prevPage();
 
+protected:
+    void resizeEvent(QResizeEvent *event) override;
+
+
 private:
     void createActions();
     void createMenus();

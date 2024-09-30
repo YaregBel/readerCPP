@@ -48,6 +48,14 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), currentPage(0)
 
     widget->setLayout(layout);
 
+
+    // Получаем размеры label'a для решения проблемы получения
+    // некоретных размеров.
+    QSize initialSize = label->sizeHint();
+    qDebug() << "Начальный размер QLabel (sizeHint):" << initialSize;
+
+
+
     QString filename = "d:/buff.txt";
     QFile file(filename);
     if ( file.open(QIODevice::ReadOnly)){
@@ -75,6 +83,15 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), currentPage(0)
 
 
 }
+
+void MainWindow::resizeEvent(QResizeEvent *event) {
+    QMainWindow::resizeEvent(event);
+
+    // Получаем новый размер QLabel при изменении размеров окна
+    QSize currentSize = label->size();
+    qDebug() << "Текущий размер QLabel после изменения:" << currentSize;
+}
+
 
 void MainWindow::paginateText() {
     QFontMetrics metrics(label->font());
