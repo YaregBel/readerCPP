@@ -31,6 +31,11 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), currentPage(0)
     label->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     label->setAlignment(Qt::AlignCenter);
 
+    int w_widget = widget->width()/100  * 70;
+    int w_height = widget->height()/100 * 35;
+
+    label->resize(QSize(w_widget, w_height));
+
     // Кнопки, для перемещения между страницами
     nextButton = new QPushButton("Next", this);
     prevButton = new QPushButton("Previous", this);
@@ -48,13 +53,10 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), currentPage(0)
 
     widget->setLayout(layout);
 
-
     // Получаем размеры label'a для решения проблемы получения
     // некоретных размеров.
     QSize initialSize = label->sizeHint();
     qDebug() << "Начальный размер QLabel (sizeHint):" << initialSize;
-
-
 
     QString filename = "d:/buff.txt";
     QFile file(filename);
