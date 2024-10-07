@@ -27,14 +27,9 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), currentPage(0)
     // infoLabel->setAlignment(Qt::AlignCenter);
 
     label = new QLabel(this);
-    label->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
-    label->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    label->setAlignment(Qt::AlignCenter);
-
-    int w_widget = widget->width()/100  * 70;
-    int w_height = widget->height()/100 * 35;
-
-    label->resize(QSize(w_widget, w_height));
+    //label->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
+    //label->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    //label->setAlignment(Qt::AlignCenter);
 
     // Кнопки, для перемещения между страницами
     nextButton = new QPushButton("Next", this);
@@ -55,7 +50,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), currentPage(0)
 
     // Получаем размеры label'a для решения проблемы получения
     // некоретных размеров.
-    QSize initialSize = label->sizeHint();
+    QSize initialSize = label->size();
     qDebug() << "Начальный размер QLabel (sizeHint):" << initialSize;
 
     QString filename = "d:/buff.txt";
@@ -79,8 +74,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), currentPage(0)
     statusBar()->showMessage(message);
 
     setWindowTitle(tr("Menus"));
-    setMinimumSize(160, 160);
-    resize(480, 320);
+    //setMinimumSize(160, 160);
+    //resize(480, 320);
 
 
 
@@ -92,6 +87,13 @@ void MainWindow::resizeEvent(QResizeEvent *event) {
     // Получаем новый размер QLabel при изменении размеров окна
     QSize currentSize = label->size();
     qDebug() << "Текущий размер QLabel после изменения:" << currentSize;
+
+    pages.clear();
+    label->clear();
+    currentPage = 0;
+
+    paginateText();
+    updatePageDisplay();
 }
 
 
@@ -128,11 +130,14 @@ void MainWindow::paginateText() {
     if (!currentPageLines.isEmpty()) {
         pages.append(currentPageLines.join('\n'));
     }
+
 }
 
 
 
 void MainWindow::updatePageDisplay() {
+
+    qDebug() << pages.length();
     if (currentPage >= 0 && currentPage < pages.size()) {
         label->setText(pages[currentPage]);
     }
@@ -186,19 +191,22 @@ void MainWindow::newFile(){
 }
 
 void MainWindow::open(){
-    infoLabel->setText(tr("Invoked <b>File|Open</b>"));
 
-    QString filename = "d:/buff.txt";
-    QFile file(filename);
+    QString fileName = QFileDialog::getOpenFileName(this,
+                                            tr("Open Image"), "", tr("Image Files (*.txt *.html *.epub *.fb2)"));
 
+    //qDebug() << fileName;
+
+    QFile file(fileName);
     if ( file.open(QIODevice::ReadOnly)){
         QByteArray data = file.readAll();
         qDebug() << data;
-        infoLabel->setText(tr(data));
-        infoLabel->setWordWrap(true);
+        text = tr(data);
     }
-
     file.close();
+
+    paginateText();
+    updatePageDisplay();
 }
 
 void MainWindow::save(){
